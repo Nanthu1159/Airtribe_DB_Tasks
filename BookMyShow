@@ -1,0 +1,181 @@
+1. MovieDetails
+MovieId, (PK)
+MovieName,
+SensorType,
+Genre,
+Duration,
+ReleaseDate,
+Description,
+Cast
+
+2. TheatreDetails
+ThreatreId, (PK)
+ThreatreName,
+Address,
+State,
+City,
+ZipCode
+
+3. ScreenDetails
+ScreenId,
+ThreatreId,
+ScreenName,
+ScreenName,
+TotalSeats
+
+4. ShowDetails
+ShowId, (PK)
+ScreenId,
+MovieId,
+ShowTime,
+ShowDate,
+MovieFormat <!-- 3D/2D/IMAX -->
+Language
+
+
+5. SeatDetails
+SeatId, (PK)
+ScreenId,
+SeatType, <!-- Standard/Premium/Luxury/Balcony-->
+RowNumber,
+SeatNumber,
+IsOccupied
+
+
+6. UserDetails
+UserId, (PK)
+UserName,
+Email,
+PhoneNumber
+
+7. BookingDetails
+BookingId, (PK)
+ShowId,
+UserId,
+Total_Cost,
+PaymentMethod,
+BookedTime
+
+8. TicketDetails
+TicketId, (PK)
+BookingId
+SeatId,
+ShowId,
+Cost
+
+
+—--------------
+
+Create table MovieDetails(MovieId int AUTO_INCREMENT Primary key, MovieName varchar(50) NOT NULL, 
+SensorType varchar (10), Genre varchar(30), Duration int, ReleaseDate date, Description text, 
+cast text(255));
+
+desc MovieDetails;
+
+Create table TheatreDetails(ThreatreId int AUTO_INCREMENT Primary key, ThreatreName varchar(50) NOT NULL,
+Address varchar(100), State varchar(50), City varchar(50), ZipCode int);
+
+desc TheatreDetails;
+
+Create table ScreenDetails(ScreenId int AUTO_INCREMENT Primary key, TheatreId int NOT NULL, 
+ScreenNumber int, ScreenName varchar(50), TotalSeats int);
+
+desc ScreenDetails;
+
+Create table ShowDetails(ShowId int AUTO_INCREMENT Primary key, ScreenId int NOT NULL, 
+MovieId int NOT NULL, ShowTime Time NOT NULL, ShowDate Date NOT NULL, MovieFormat char(10) default '2D', 
+Language varchar(20));
+
+desc ShowDetails;
+
+Create table SeatDetails(SeatId int AUTO_INCREMENT Primary key, ScreenId int NOT NULL, SeatingType char(25), 
+RowNumber char, SeatNumber tinyInt, IsOccupied Boolean);
+
+desc SeatDetails;
+
+Create table UserDetails(UserId int AUTO_INCREMENT Primary key, UserName varchar(50), Email varchar(50) Unique,
+PhoneNumber int);
+
+desc UserDetails;
+
+Create table BookingDetails(BookingId int AUTO_INCREMENT Primary key, ShowId int NOT NULL, UserId int NOT NULL,
+Total_Cost int, PaymentMethod varchar(50), BookedTime timestamp default current_timestamp);
+
+desc BookingDetails;
+
+Create table TicketDetails(TicketId int AUTO_INCREMENT Primary key, BookingId int NOT NULL, 
+SeatId int NOT NULL, ShowId int NOT NULL, Cost int);
+
+desc TicketDetails;
+
+
+P1
+—---------------------
+
+INSERT INTO MovieDetails (MovieName, SensorType, Genre, Duration, ReleaseDate, Description, cast)
+VALUES
+('Inception', 'UA', 'Sci-Fi', 148, '2010-07-16', 'A mind-bending thriller by Christopher Nolan.', 'Leonardo DiCaprio, Joseph Gordon-Levitt, Ellen Page'),
+('RRR', 'UA', 'Action', 187, '2022-03-25', 'Epic action drama directed by S.S. Rajamouli.', 'NTR Jr, Ram Charan, Alia Bhatt'),
+('KGF Chapter 2', 'UA', 'Action/Drama', 168, '2022-04-14', 'Rocky Bhai continues his rise as a feared don.', 'Yash, Sanjay Dutt, Raveena Tandon');
+
+
+INSERT INTO TheatreDetails (ThreatreName, Address, State, City, ZipCode)
+VALUES
+('PVR Cinemas', 'Phoenix Mall', 'Tamil Nadu', 'Chennai', 600042),
+('INOX', 'Forum Mall', 'Karnataka', 'Bangalore', 560095),
+('Sathyam Cinemas', 'Mount Road', 'Tamil Nadu', 'Chennai', 600006);
+
+
+INSERT INTO ScreenDetails (TheatreId, ScreenNumber, ScreenName, TotalSeats)
+VALUES
+(1, 1, 'Screen-1', 100),
+(1, 2, 'Screen-2', 80),
+(2, 1, 'Main Screen', 120),
+(3, 1, 'Sathyam Grand', 150);
+
+
+INSERT INTO ShowDetails (ScreenId, MovieId, ShowTime, ShowDate, MovieFormat, Language)
+VALUES
+(1, 1, '18:30:00', '2025-08-18', 'IMAX', 'English'), -- Inception @ PVR
+(2, 2, '20:00:00', '2025-08-18', '2D', 'Telugu'),    -- RRR @ PVR
+(3, 2, '19:00:00', '2025-08-18', '2D', 'Hindi'),     -- RRR @ INOX
+(4, 3, '21:00:00', '2025-08-18', 'IMAX', 'Kannada');  -- KGF2 @ Sathyam
+
+
+INSERT INTO SeatDetails (ScreenId, SeatingType, RowNumber, SeatNumber, IsOccupied)
+VALUES
+(1, 'Standard', 'A', 1, FALSE),
+(1, 'Standard', 'A', 2, FALSE),
+(1, 'Premium', 'B', 1, TRUE),
+(2, 'Standard', 'A', 1, FALSE),
+(2, 'Premium', 'B', 2, TRUE),
+(3, 'VIP', 'C', 1, FALSE),
+(4, 'Standard', 'D', 5, FALSE);
+
+
+INSERT INTO UserDetails (UserName, Email, PhoneNumber)
+VALUES
+('Arun Kumar', 'arun@example.com', 9876543210),
+('Priya Sharma', 'priya@example.com', 9123456789),
+('Rahul Mehta', 'rahul@example.com', 9988776655);
+INSERT INTO BookingDetails (ShowId, UserId, Total_Cost, PaymentMethod)
+VALUES
+(1, 1, 400, 'UPI'),
+(2, 2, 300, 'Credit Card'),
+(3, 3, 500, 'NetBanking');
+
+
+INSERT INTO TicketDetails (BookingId, SeatId, ShowId, Cost)
+VALUES
+(1, 1, 1, 200),
+(1, 2, 1, 200),
+(2, 4, 2, 300),
+(3, 6, 3, 500);
+
+
+P2
+—-------------------------
+
+
+
+Select TheatreDetails.ThreatreName, MovieDetails.MovieName, ShowDetails.ShowDate, ShowDetails.ShowTime,  ShowDetails.MovieFormat, ShowDetails.Language from ShowDetails inner join ScreenDetails on ShowDetails.ScreenId=ScreenDetails.ScreenId inner join TheatreDetails on ScreenDetails.TheatreId=TheatreDetails.TheatreId inner join MovieDetails on ShowDetails.MovieId=MovieDetails.MovieId where ShowDetails.ShowDate=’2025-08-18’ and TheatreDetails.TheatreName = ‘PVR Cinemas’ order by ShowDetails.ShowTime;
