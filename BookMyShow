@@ -175,7 +175,4 @@ VALUES
 
 P2
 —-------------------------
-
-
-
 Select TheatreDetails.ThreatreName, MovieDetails.MovieName, ShowDetails.ShowDate, ShowDetails.ShowTime,  ShowDetails.MovieFormat, ShowDetails.Language from ShowDetails inner join ScreenDetails on ShowDetails.ScreenId=ScreenDetails.ScreenId inner join TheatreDetails on ScreenDetails.TheatreId=TheatreDetails.TheatreId inner join MovieDetails on ShowDetails.MovieId=MovieDetails.MovieId where ShowDetails.ShowDate=’2025-08-18’ and TheatreDetails.TheatreName = ‘PVR Cinemas’ order by ShowDetails.ShowTime;
